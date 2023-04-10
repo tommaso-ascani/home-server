@@ -1,0 +1,13 @@
+services:
+   jdownloader:
+    image: jaymoulin/jdownloader
+    container_name: jdownloader
+    restart: always
+    user: 1001:100
+    volumes:
+        - ${CONFIG_PATH}:/opt/JDownloader/app/cfg
+        - ${DOWNLOAD_PATH}:/opt/JDownloader/Downloads
+    environment: 
+            MYJD_DEVICE_NAME: ${DEVICE_NAME}
+    ports:
+        - 3129:3129
