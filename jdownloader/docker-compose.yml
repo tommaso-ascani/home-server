@@ -11,3 +11,4 @@ services:
             MYJD_DEVICE_NAME: ${DEVICE_NAME}
     ports:
         - 3129:3129
+    env_file: .env
