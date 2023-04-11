@@ -1,0 +1,70 @@
+services:
+  radarr:
+    image: linuxserver/radarr:latest
+    container_name: radarr
+    volumes:
+      - ${CONFIG_PATH}/radarr:/config
+      - ${MEDIA_PATH}/Film:/movies
+      - ${MEDIA_PATH}/Downloads:/downloads
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+    env_file: .env
+
+  sonarr:
+    image: linuxserver/sonarr:latest
+    container_name: sonarr
+    volumes:
+      - ${CONFIG_PATH}/sonarr:/config
+      - ${MEDIA_PATH}/Tv:/tv
+      - ${MEDIA_PATH}/Downloads:/downloads
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+    env_file: .env
+
+  prowlarr:
+    image: linuxserver/prowlarr:develop
+    container_name: prowlarr
+    volumes:
+      - ${CONFIG_PATH}/prowlarr:/config
+    ports:
+      - 9696:9696
+    restart: unless-stopped
+    env_file: .env
+
+  transmission:
+    image: linuxserver/transmission:latest
+    container_name: transmission
+    volumes:
+      - ${CONFIG_PATH}/transmission:/config
+      - ${MEDIA_PATH}/Downloads:/downloads
+    ports:
+      - 9091:9091
+    restart: unless-stopped
+    env_file: .env
+
+  jellyfin:
+    image: linuxserver/jellyfin:latest
+    container_name: jellyfin
+    volumes:
+      - ${CONFIG_PATH}/jellyfin:/config
+      - ${MEDIA_PATH}/Tv:/tv
+      - ${MEDIA_PATH}/Film:/movies
+    ports:
+      - 8096:8096
+    restart: unless-stopped
+    env_file: .env
+
+  plex:
+    image: linuxserver/plex:latest
+    container_name: plex
+    network_mode: host
+    environment:
+      - VERSION=docker
+    volumes:
+      - ${CONFIG_PATH}/plex:/config
+      - ${MEDIA_PATH}/Tv:/tv
+      - ${MEDIA_PATH}/Film:/movies
+    restart: unless-stopped
+    env_file: .env
