@@ -1,0 +1,11 @@
+services:
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    volumes:
+      - ${DATA_PATH}:/data
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+      - 9000:9000
+    restart: unless-stopped
+    env_file: .env
