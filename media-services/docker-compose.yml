@@ -24,7 +24,7 @@ services:
     env_file: .env
 
   prowlarr:
-    image: linuxserver/prowlarr:develop
+    image: linuxserver/prowlarr:latest
     container_name: prowlarr
     volumes:
       - ${CONFIG_PATH}/prowlarr:/config
@@ -60,8 +60,6 @@ services:
     image: linuxserver/plex:latest
     container_name: plex
     network_mode: host
-    environment:
-      - VERSION=docker
     volumes:
       - ${CONFIG_PATH}/plex:/config
       - ${MEDIA_PATH}/Tv:/tv

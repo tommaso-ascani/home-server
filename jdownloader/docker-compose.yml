@@ -3,12 +3,11 @@ services:
     image: jaymoulin/jdownloader
     container_name: jdownloader
     restart: always
-    user: 1001:100
+    user: ${PUID}:${PGID}
     volumes:
         - ${CONFIG_PATH}:/opt/JDownloader/app/cfg
         - ${DOWNLOAD_PATH}:/opt/JDownloader/Downloads
-    environment: 
-            MYJD_DEVICE_NAME: ${DEVICE_NAME}
+        - /etc/localtime:/etc/localtime:ro
     ports:
         - 3129:3129
     env_file: .env
