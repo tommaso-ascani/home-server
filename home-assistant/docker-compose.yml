@@ -1,0 +1,11 @@
+version: "2.1"
+
+services:
+  homeassistant:
+    image: linuxserver/homeassistant:latest
+    container_name: homeassistant
+    network_mode: host
+    volumes:
+      - ${CONFIG_PATH}:/config
+    restart: unless-stopped
+    env_file: .env
