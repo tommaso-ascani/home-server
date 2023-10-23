@@ -14,10 +14,6 @@ services:
   sonarr:
     image: linuxserver/sonarr:latest
     container_name: sonarr
-    volumes:
-      - ${CONFIG_PATH}/sonarr:/config
-      - ${MEDIA_PATH}/Tv:/tv
-      - ${MEDIA_PATH}/Downloads:/downloads
     ports:
       - 8989:8989
     restart: unless-stopped
@@ -44,18 +40,6 @@ services:
     restart: unless-stopped
     env_file: .env
 
-  jellyfin:
-    image: linuxserver/jellyfin:latest
-    container_name: jellyfin
-    volumes:
-      - ${CONFIG_PATH}/jellyfin:/config
-      - ${MEDIA_PATH}/Tv:/tv
-      - ${MEDIA_PATH}/Film:/movies
-    ports:
-      - 8096:8096
-    restart: unless-stopped
-    env_file: .env
-
   plex:
     image: linuxserver/plex:latest
     container_name: plex
@@ -64,5 +48,18 @@ services:
       - ${CONFIG_PATH}/plex:/config
       - ${MEDIA_PATH}/Tv:/tv
       - ${MEDIA_PATH}/Film:/movies
+    labels:
+      # GENERAL
+      - "traefik.enable=true"
+      - "traefik.http.services.plex.loadbalancer.server.port=32400"
+      # HTTP
+      - "traefik.http.routers.plex.rule=Host(`${PLEX_HOST}`)"
+      - "traefik.http.routers.plex.entrypoints=web"
+      - "traefik.http.routers.plex.middlewares=redirect_https@file"
+      # HTTPS
+      - "traefik.http.routers.plex-https.rule=Host(`${PLEX_HOST}`)"
+      - "traefik.http.routers.plex-https.entrypoints=websecure"
+      - "traefik.http.routers.plex-https.tls=true"
+      - "traefik.http.routers.plex-https.tls.certresolver=production"
     restart: unless-stopped
     env_file: .env

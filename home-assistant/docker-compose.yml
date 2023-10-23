@@ -5,10 +5,24 @@ services:
     image: ghcr.io/home-assistant/home-assistant:stable
     container_name: homeassistant
     network_mode: host
+    labels:
+      # GENERAL
+      - "traefik.enable=true"
+      - "traefik.http.services.hassio.loadbalancer.server.port=8123"
+      # HTTP
+      - "traefik.http.routers.hassio.rule=Host(`${HASSIO_HOST}`)"
+      - "traefik.http.routers.hassio.entrypoints=web"
+      - "traefik.http.routers.hassio.middlewares=redirect_https@file"
+      # HTTPS
+      - "traefik.http.routers.hassio-https.rule=Host(`${HASSIO_HOST}`)"
+      - "traefik.http.routers.hassio-https.entrypoints=websecure"
+      - "traefik.http.routers.hassio-https.tls=true"
+      - "traefik.http.routers.hassio-https.tls.certresolver=production"
     volumes:
       - ${HASS_CONFIG_PATH}:/config
       - /etc/localtime:/etc/localtime:ro
       - /run/dbus:/run/dbus:ro
+      - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
     privileged: true
     env_file: .env
@@ -22,4 +36,4 @@ services:
     - ${MOSQUITTO_CONFIG_PATH}/data/:/mosquitto/data
     restart: always
     ports:
-    - "1883:1883" 
+    - "1883:1883"

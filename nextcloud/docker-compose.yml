@@ -1,0 +1,75 @@
+version: '2'
+
+volumes:
+  db:
+  redis:
+
+services:
+  nextcloud_db:
+    image: postgres:latest
+    restart: always
+    container_name: nextcloud_db
+    env_file: .env
+    volumes:
+      - db:/var/lib/postgresql/data
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    networks:
+      - nextcloud
+
+  app:
+    image: nextcloud:latest
+    restart: always
+    container_name: nextcloud
+    env_file: .env
+    depends_on:
+      - nextcloud_db
+      - redis
+    volumes:
+      - /mnt/HDD_Storage/docker-data/nextcloud/:/var/www/html
+      - /mnt/HDD_Storage/Nextcloud/:/var/www/html/data
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - REDIS_HOST=${REDIS_HOST}
+    labels:
+      # GENERAL
+      - "traefik.enable=true"
+      - "traefik.http.services.nextcloud.loadbalancer.server.port=80"
+      # HTTP
+      - "traefik.http.routers.nextcloud.rule=Host(`${NEXTCLOUD_HOST}`)"
+      - "traefik.http.routers.nextcloud.entrypoints=web"
+      - "traefik.http.routers.nextcloud.middlewares=redirect_https@file"
+      # HTTPS
+      - "traefik.http.routers.nextcloud-https.rule=Host(`${NEXTCLOUD_HOST}`)"
+      - "traefik.http.routers.nextcloud-https.entrypoints=websecure"
+      - "traefik.http.routers.nextcloud-https.tls=true"
+      - "traefik.http.routers.nextcloud-https.tls.certresolver=production"
+    networks:
+      - traefik_proxy
+      - nextcloud
+
+  redis:
+    image: redis:latest
+    restart: always
+    container_name: redis
+    volumes:
+      - redis:/data
+    networks:
+      - nextcloud
+
+networks:
+  traefik_proxy:
+    external: true
+  nextcloud:
+    internal: true
