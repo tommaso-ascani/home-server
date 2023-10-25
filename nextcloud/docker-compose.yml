@@ -5,7 +5,7 @@ volumes:
   redis:
 
 services:
-  nextcloud_db:
+  db:
     image: postgres:latest
     restart: always
     container_name: nextcloud_db
@@ -28,7 +28,7 @@ services:
     container_name: nextcloud
     env_file: .env
     depends_on:
-      - nextcloud_db
+      - db
       - redis
     volumes:
       - /mnt/HDD_Storage/docker-data/nextcloud/:/var/www/html
@@ -62,7 +62,7 @@ services:
   redis:
     image: redis:latest
     restart: always
-    container_name: redis
+    container_name: nextcloud_redis
     volumes:
       - redis:/data
     networks:
