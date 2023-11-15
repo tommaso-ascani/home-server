@@ -1,7 +1,7 @@
 version: '2'
 
 volumes:
-  db:
+  nextcloud_db:
   redis:
 
 services:
@@ -52,6 +52,8 @@ services:
       - "traefik.http.routers.nextcloud-https.entrypoints=websecure"
       - "traefik.http.routers.nextcloud-https.tls=true"
       - "traefik.http.routers.nextcloud-https.tls.certresolver=production"
+      # WATCHTOWER
+      - "com.centurylinklabs.watchtower.enable=true"
     networks:
       - traefik_proxy
       - nextcloud

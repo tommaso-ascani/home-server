@@ -61,5 +61,7 @@ services:
       - "traefik.http.routers.plex-https.entrypoints=websecure"
       - "traefik.http.routers.plex-https.tls=true"
       - "traefik.http.routers.plex-https.tls.certresolver=production"
+      # WATCHTOWER
+      - "com.centurylinklabs.watchtower.enable=true"
     restart: unless-stopped
     env_file: .env

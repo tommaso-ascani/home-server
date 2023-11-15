@@ -32,6 +32,8 @@ services:
       - "traefik.http.routers.paperless-https.entrypoints=websecure"
       - "traefik.http.routers.paperless-https.tls=true"
       - "traefik.http.routers.paperless-https.tls.certresolver=production"
+      # WATCHTOWER
+      - "com.centurylinklabs.watchtower.enable=true"
     volumes:
       - ${DATA_PATH}/paperless/data:/usr/src/paperless/data
       - ${DATA_PATH}/paperless/media:/usr/src/paperless/media
