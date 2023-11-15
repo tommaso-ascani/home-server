@@ -4,15 +4,12 @@ services:
   homeassistant:
     image: ghcr.io/home-assistant/home-assistant:stable
     container_name: homeassistant
+    env_file: .env
     network_mode: host
     labels:
       # GENERAL
       - "traefik.enable=true"
       - "traefik.http.services.hassio.loadbalancer.server.port=8123"
-      # HTTP
-      - "traefik.http.routers.hassio.rule=Host(`${HASSIO_HOST}`)"
-      - "traefik.http.routers.hassio.entrypoints=web"
-      - "traefik.http.routers.hassio.middlewares=redirect_https@file"
       # HTTPS
       - "traefik.http.routers.hassio-https.rule=Host(`${HASSIO_HOST}`)"
       - "traefik.http.routers.hassio-https.entrypoints=websecure"
@@ -25,15 +22,28 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
     privileged: true
+
+  hassio_db:
+    image: postgres:latest
+    restart: always
+    container_name: hassio_db
     env_file: .env
+    network_mode: host
+    volumes:
+      - ${HASS_CONFIG_PATH}/database:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 
   mosquitto:
     container_name: mosquitto
     image: eclipse-mosquitto
+    env_file: .env
     volumes:
     - ${MOSQUITTO_CONFIG_PATH}/config:/mosquitto/config
     - ${MOSQUITTO_CONFIG_PATH}/log:/mosquitto/log
     - ${MOSQUITTO_CONFIG_PATH}/data/:/mosquitto/data
     restart: always
     ports:
-    - "1883:1883"
+    - 1883:1883

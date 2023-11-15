@@ -7,6 +7,8 @@ services:
     restart: unless-stopped
     volumes:
       - redisdata:/data
+    networks:
+      - paperless
 
   paperless:
     image: ghcr.io/paperless-ngx/paperless-ngx:latest
@@ -25,10 +27,6 @@ services:
       # GENERAL
       - "traefik.enable=true"
       - "traefik.http.services.paperless.loadbalancer.server.port=8000"
-      # HTTP
-      - "traefik.http.routers.paperless.rule=Host(`${PAPERLESS_HOST}`)"
-      - "traefik.http.routers.paperless.entrypoints=web"
-      - "traefik.http.routers.paperless.middlewares=redirect_https@file"
       # HTTPS
       - "traefik.http.routers.paperless-https.rule=Host(`${PAPERLESS_HOST}`)"
       - "traefik.http.routers.paperless-https.entrypoints=websecure"
@@ -44,7 +42,7 @@ services:
       PAPERLESS_REDIS: redis://paperless_redis:6379
     networks:
       - traefik_proxy
-      - default
+      - paperless
 
 volumes:
   redisdata:
@@ -54,3 +52,6 @@ volumes:
 networks:
   traefik_proxy:
     external: true
+  paperless:
+    name: paperless
+    internal: true
