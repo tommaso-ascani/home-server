@@ -48,8 +48,6 @@ services:
 
 volumes:
   redisdata:
-  media:
-  data:
 
 networks:
   traefik_proxy:
