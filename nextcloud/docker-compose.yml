@@ -20,7 +20,7 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     networks:
-      - nextcloud
+      - nextcloud_default
 
   app:
     image: nextcloud:latest
@@ -56,7 +56,7 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
     networks:
       - traefik_proxy
-      - nextcloud
+      - nextcloud_default
 
   redis:
     image: redis:latest
@@ -65,10 +65,11 @@ services:
     volumes:
       - redis:/data
     networks:
-      - nextcloud
+      - nextcloud_default
 
 networks:
   traefik_proxy:
     external: true
   nextcloud:
+    name: nextcloud_default
     internal: true
