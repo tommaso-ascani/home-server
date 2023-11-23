@@ -38,7 +38,7 @@ services:
     container_name: transmission
     volumes:
       - ${CONFIG_PATH}/transmission:/config
-      - ${MEDIA_PATH}/Downloads:/downloads
+      - ${MEDIA_PATH}/downloads:/downloads
     ports:
       - 9091:9091
     restart: unless-stopped

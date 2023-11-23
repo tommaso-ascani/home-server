@@ -1,7 +1,6 @@
 version: '2'
 
 volumes:
-  nextcloud_db:
   redis:
 
 services:
@@ -11,11 +10,8 @@ services:
     container_name: nextcloud_db
     env_file: .env
     volumes:
-      - nextcloud_db:/var/lib/postgresql/data
+      - ${DB_DATA}:/var/lib/postgresql/data
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -48,7 +44,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.services.nextcloud.loadbalancer.server.port=80"
       # HTTPS
-      - "traefik.http.routers.nextcloud-https.rule=Host(`${PRIMARY_NEXTCLOUD_HOST}`) || Host(`${SECONDARY_NEXTCLOUD_HOST}`)"
+      - "traefik.http.routers.nextcloud-https.rule=Host(`${PRIMARY_NEXTCLOUD_HOST}`)"
       - "traefik.http.routers.nextcloud-https.entrypoints=websecure"
       - "traefik.http.routers.nextcloud-https.tls=true"
       - "traefik.http.routers.nextcloud-https.tls.certresolver=production"

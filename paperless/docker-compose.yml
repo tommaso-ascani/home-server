@@ -8,7 +8,7 @@ services:
     volumes:
       - redisdata:/data
     networks:
-      - paperless_default
+      - paperless
 
   paperless:
     image: ghcr.io/paperless-ngx/paperless-ngx:latest
@@ -44,7 +44,7 @@ services:
       PAPERLESS_REDIS: redis://paperless_redis:6379
     networks:
       - traefik_proxy
-      - paperless_default
+      - paperless
 
 volumes:
   redisdata:
