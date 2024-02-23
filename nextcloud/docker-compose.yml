@@ -2,6 +2,7 @@ version: '2'
 
 volumes:
   redis:
+  db:
 
 services:
   nextcloud_db:
@@ -10,7 +11,7 @@ services:
     container_name: nextcloud_db
     env_file: .env
     volumes:
-      - ${DB_DATA}:/var/lib/postgresql/data
+      - db:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
@@ -40,15 +41,6 @@ services:
       - REDIS_HOST=${REDIS_HOST}
       - PHP_MEMORY_LIMIT=${MEMORY_LIMIT}
     labels:
-      # GENERAL
-      - "traefik.enable=true"
-      - "traefik.http.services.nextcloud.loadbalancer.server.port=80"
-      # HTTPS
-      - "traefik.http.routers.nextcloud-https.rule=Host(`${PRIMARY_NEXTCLOUD_HOST}`)"
-      - "traefik.http.routers.nextcloud-https.entrypoints=websecure"
-      - "traefik.http.routers.nextcloud-https.tls=true"
-      - "traefik.http.routers.nextcloud-https.tls.certresolver=production"
-      # WATCHTOWER
       - "com.centurylinklabs.watchtower.enable=true"
     networks:
       - traefik_proxy

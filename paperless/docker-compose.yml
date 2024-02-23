@@ -10,12 +10,27 @@ services:
     networks:
       - paperless
 
+  paperless_db:
+    image: postgres:latest
+    container_name: paperless_db
+    restart: unless-stopped
+    volumes:
+      - ${POSTGRES_DATA_PATH}:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - paperless
+    env_file: .env
+
   paperless:
     image: ghcr.io/paperless-ngx/paperless-ngx:latest
     container_name: paperless
     restart: unless-stopped
     depends_on:
       - paperless_redis
+      - paperless_db
     ports:
       - 8000:8000
     healthcheck:
@@ -24,24 +39,16 @@ services:
       timeout: 10s
       retries: 5
     labels:
-      # GENERAL
-      - "traefik.enable=true"
-      - "traefik.http.services.paperless.loadbalancer.server.port=8000"
-      # HTTPS
-      - "traefik.http.routers.paperless-https.rule=Host(`${PAPERLESS_HOST}`)"
-      - "traefik.http.routers.paperless-https.entrypoints=websecure"
-      - "traefik.http.routers.paperless-https.tls=true"
-      - "traefik.http.routers.paperless-https.tls.certresolver=production"
-      # WATCHTOWER
       - "com.centurylinklabs.watchtower.enable=true"
     volumes:
-      - ${DATA_PATH}/paperless/data:/usr/src/paperless/data
-      - ${DATA_PATH}/paperless/media:/usr/src/paperless/media
-      - ${DATA_PATH}/paperless/export:/usr/src/paperless/export
-      - ${DATA_PATH}/paperless/consume:/usr/src/paperless/consume
+      - ${PAPERLESS_DATA_PATH}/data:/usr/src/paperless/data
+      - ${PAPERLESS_DATA_PATH}/media:/usr/src/paperless/media
+      - ${PAPERLESS_DATA_PATH}/export:/usr/src/paperless/export
+      - ${PAPERLESS_DATA_PATH}/consume:/usr/src/paperless/consume
     env_file: .env
     environment:
       PAPERLESS_REDIS: redis://paperless_redis:6379
+      PAPERLESS_DBHOST: paperless_db
     networks:
       - traefik_proxy
       - paperless

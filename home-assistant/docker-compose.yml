@@ -7,15 +7,6 @@ services:
     env_file: .env
     network_mode: host
     labels:
-      # GENERAL
-      - "traefik.enable=true"
-      - "traefik.http.services.hassio.loadbalancer.server.port=8123"
-      # HTTPS
-      - "traefik.http.routers.hassio-https.rule=Host(`${HASSIO_HOST}`)"
-      - "traefik.http.routers.hassio-https.entrypoints=websecure"
-      - "traefik.http.routers.hassio-https.tls=true"
-      - "traefik.http.routers.hassio-https.tls.certresolver=production"
-      # WATCHTOWER
       - "com.centurylinklabs.watchtower.enable=true"
     volumes:
       - ${HASS_CONFIG_PATH}:/config
