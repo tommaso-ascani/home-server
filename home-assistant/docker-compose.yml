@@ -6,8 +6,6 @@ services:
     container_name: homeassistant
     env_file: .env
     network_mode: host
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
     volumes:
       - ${HASS_CONFIG_PATH}:/config
       - /etc/localtime:/etc/localtime:ro

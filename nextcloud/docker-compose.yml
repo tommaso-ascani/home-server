@@ -40,8 +40,6 @@ services:
       - POSTGRES_HOST=${POSTGRES_HOST}
       - REDIS_HOST=${REDIS_HOST}
       - PHP_MEMORY_LIMIT=${MEMORY_LIMIT}
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
     networks:
       - traefik_proxy
       - nextcloud
