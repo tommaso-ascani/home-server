@@ -1,5 +1,3 @@
-version: "3.4"
-
 services:
   paperless_redis:
     image: docker.io/library/redis:latest
