@@ -56,5 +56,4 @@ networks:
   traefik_proxy:
     external: true
   paperless:
-    name: paperless_default
     internal: true

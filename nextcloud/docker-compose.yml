@@ -51,7 +51,6 @@ networks:
   traefik_proxy:
     external: true
   nextcloud:
-    name: nextcloud_default
     internal: true
 
 volumes:
