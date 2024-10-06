@@ -9,8 +9,8 @@ services:
       - 443:443
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./config:/etc/traefik/:ro
-      - ./certificates:/certificates
+      - ${DATA_PATH}/config:/etc/traefik/:ro
+      - ${DATA_PATH}/certificates:/certificates
     networks:
       - traefik_proxy
     extra_hosts: 
