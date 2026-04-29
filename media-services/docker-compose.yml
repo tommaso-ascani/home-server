@@ -10,6 +10,12 @@ services:
       - 7878:7878
     restart: unless-stopped
     env_file: .env
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:7878/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
   sonarr:
     image: linuxserver/sonarr:latest
@@ -22,6 +28,12 @@ services:
       - 8989:8989
     restart: unless-stopped
     env_file: .env
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8989/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
   prowlarr:
     image: linuxserver/prowlarr:latest
@@ -32,6 +44,12 @@ services:
       - 9696:9696
     restart: unless-stopped
     env_file: .env
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9696/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
   transmission:
     image: linuxserver/transmission:latest
@@ -43,6 +61,11 @@ services:
       - 9091:9091
     restart: unless-stopped
     env_file: .env
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:9091/transmission/rpc -o /dev/null -w '%{http_code}' | grep -q '409' || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   plex:
     image: linuxserver/plex:latest
@@ -55,6 +78,12 @@ services:
       - ${CONFIG_PATH}/transcode/plex:/transcode
     restart: unless-stopped
     env_file: .env
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:32400/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
 
   flaresolverr:
     image: ghcr.io/flaresolverr/flaresolverr:latest
@@ -69,3 +98,8 @@ services:
       - 8191:8191
     volumes:
       - ${CONFIG_PATH}/flaresolverr:/config
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8191/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3

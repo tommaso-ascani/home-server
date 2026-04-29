@@ -12,6 +12,11 @@ services:
       - ${DATA_PATH}/vaultwarden:/data
     networks:
       - traefik_proxy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost/alive || wget -q -O /dev/null http://localhost/alive || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
 
 networks:
   traefik_proxy:
