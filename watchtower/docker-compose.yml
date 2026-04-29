@@ -6,6 +6,7 @@ services:
     env_file: .env
     environment:
       - WATCHTOWER_CLEANUP=true
+      - DOCKER_API_VERSION=1.41
       - WATCHTOWER_SCHEDULE=0 0 4 * * *
       - TZ=Europe/Rome
       - WATCHTOWER_NOTIFICATIONS=shoutrrr
