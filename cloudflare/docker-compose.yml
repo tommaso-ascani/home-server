@@ -2,5 +2,5 @@ services:
   cloudflare-ddns:
     image: oznu/cloudflare-ddns:latest
     container_name: cloudflare
-    restart: always
+    restart: unless-stopped
     env_file: .env

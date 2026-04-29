@@ -1,7 +1,7 @@
 services:
   nextcloud_db:
     image: postgres:16.4
-    restart: always
+    restart: unless-stopped
     container_name: nextcloud_db
     env_file: .env
     volumes:
@@ -11,7 +11,7 @@ services:
 
   app:
     image: nextcloud:latest
-    restart: always
+    restart: unless-stopped
     container_name: nextcloud
     env_file: .env
     depends_on:
@@ -26,7 +26,7 @@ services:
 
   redis:
     image: redis:latest
-    restart: always
+    restart: unless-stopped
     container_name: nextcloud_redis
     volumes:
       - redis:/data
