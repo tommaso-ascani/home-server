@@ -4,6 +4,8 @@ services:
     container_name: vaultwarden
     restart: unless-stopped
     env_file: .env
+    ports:
+      - "192.168.1.100:8888:80"
     volumes:
       - ${DATA_PATH}/vaultwarden:/data
     networks:
