@@ -11,9 +11,3 @@ services:
       resources:
         limits:
           memory: 256m
-    healthcheck:
-      test: ["CMD-SHELL", "wget -q --spider http://localhost:3001/ || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s

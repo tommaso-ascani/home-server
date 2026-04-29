@@ -3,7 +3,8 @@ services:
     image: timothyjmiller/cloudflare-ddns:latest
     container_name: cloudflare
     restart: unless-stopped
-    env_file: .env
+    volumes:
+      - ./config/config.json:/config.json:ro
     deploy:
       resources:
         limits:
