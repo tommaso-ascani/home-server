@@ -10,6 +10,8 @@ services:
       - /run/dbus:/run/dbus:ro
     restart: unless-stopped
     privileged: true
+    labels:
+      - com.centurylinklabs.watchtower.monitor-only=true
 
   hassio_db:
     image: postgres:16.4

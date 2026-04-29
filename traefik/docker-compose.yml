@@ -1,6 +1,8 @@
 services:
   traefik:
-    image: traefik:latest
+    image: traefik:3
+    labels:
+      - com.centurylinklabs.watchtower.monitor-only=true
     container_name: traefik
     hostname: traefik
     restart: unless-stopped

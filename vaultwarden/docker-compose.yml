@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     env_file: .env
     labels:
-      - com.centurylinklabs.watchtower.enable=false
+      - com.centurylinklabs.watchtower.monitor-only=true
     ports:
       - "127.0.0.1:8888:80"
     volumes:

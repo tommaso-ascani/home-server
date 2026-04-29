@@ -5,7 +5,7 @@ services:
     container_name: nextcloud_db
     env_file: .env
     labels:
-      - com.centurylinklabs.watchtower.enable=false
+      - com.centurylinklabs.watchtower.monitor-only=true
     volumes:
       - db:/var/lib/postgresql/data
     networks:
@@ -17,7 +17,7 @@ services:
     container_name: nextcloud
     env_file: .env
     labels:
-      - com.centurylinklabs.watchtower.enable=false
+      - com.centurylinklabs.watchtower.monitor-only=true
     depends_on:
       - nextcloud_db
       - redis
