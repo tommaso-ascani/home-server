@@ -10,5 +10,9 @@ services:
       - TZ=Europe/Rome
       - WATCHTOWER_NOTIFICATIONS=shoutrrr
       - WATCHTOWER_NOTIFICATION_URL=telegram://${TELEGRAM_BOT_TOKEN}@telegram?channels=${TELEGRAM_CHAT_ID}
+    deploy:
+      resources:
+        limits:
+          memory: 256m
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock

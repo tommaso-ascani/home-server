@@ -7,6 +7,10 @@ services:
     ports:
       - 3001:3001
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 256m
     healthcheck:
       test: ["CMD-SHELL", "wget -q --spider http://localhost:3001/ || exit 1"]
       interval: 30s

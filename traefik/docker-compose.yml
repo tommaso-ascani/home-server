@@ -17,6 +17,10 @@ services:
       - traefik_proxy
     extra_hosts:
       - host.docker.internal:172.17.0.1
+    deploy:
+      resources:
+        limits:
+          memory: 256m
     healthcheck:
       test: ["CMD-SHELL", "wget -q --spider http://localhost:8080/ || exit 1"]
       interval: 30s

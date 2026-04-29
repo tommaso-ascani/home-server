@@ -12,6 +12,10 @@ services:
     privileged: true
     labels:
       - com.centurylinklabs.watchtower.monitor-only=true
+    deploy:
+      resources:
+        limits:
+          memory: 1g
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8123/ || exit 1"]
       interval: 30s
@@ -32,6 +36,10 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    deploy:
+      resources:
+        limits:
+          memory: 512m
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"]
       interval: 30s
@@ -49,6 +57,10 @@ services:
     restart: unless-stopped
     ports:
     - 1883:1883
+    deploy:
+      resources:
+        limits:
+          memory: 64m
     healthcheck:
       test: ["CMD-SHELL", "mosquitto_pub -h 127.0.0.1 -p 1883 -t 'healthcheck' -m 'ping' -q 0 || exit 1"]
       interval: 30s

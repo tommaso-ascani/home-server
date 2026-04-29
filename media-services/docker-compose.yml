@@ -10,6 +10,10 @@ services:
       - 7878:7878
     restart: unless-stopped
     env_file: .env
+    deploy:
+      resources:
+        limits:
+          memory: 512m
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:7878/health || exit 1"]
       interval: 30s
@@ -28,6 +32,10 @@ services:
       - 8989:8989
     restart: unless-stopped
     env_file: .env
+    deploy:
+      resources:
+        limits:
+          memory: 512m
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8989/health || exit 1"]
       interval: 30s
@@ -44,6 +52,10 @@ services:
       - 9696:9696
     restart: unless-stopped
     env_file: .env
+    deploy:
+      resources:
+        limits:
+          memory: 256m
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:9696/health || exit 1"]
       interval: 30s
@@ -61,6 +73,10 @@ services:
       - 9091:9091
     restart: unless-stopped
     env_file: .env
+    deploy:
+      resources:
+        limits:
+          memory: 256m
     healthcheck:
       test: ["CMD-SHELL", "curl -sf http://localhost:9091/transmission/rpc -o /dev/null -w '%{http_code}' | grep -q '409' || exit 1"]
       interval: 30s
@@ -78,6 +94,10 @@ services:
       - ${CONFIG_PATH}/transcode/plex:/transcode
     restart: unless-stopped
     env_file: .env
+    deploy:
+      resources:
+        limits:
+          memory: 2g
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:32400/health || exit 1"]
       interval: 30s
@@ -98,6 +118,10 @@ services:
       - 8191:8191
     volumes:
       - ${CONFIG_PATH}/flaresolverr:/config
+    deploy:
+      resources:
+        limits:
+          memory: 512m
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8191/health || exit 1"]
       interval: 30s
